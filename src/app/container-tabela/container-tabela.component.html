@@ -1,1 +1,40 @@
-<p>container-tabela works!</p>
+<div class="painel-container">
+  <h2>{{ titulo }}</h2>
+  <p class="subtitulo">{{ fazenda }}</p>
+
+  <table class="tabela-sensores">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Data/Hora</th>
+        <th>N (mg/kg)</th>
+        <th>P (mg/kg)</th>
+        <th>K (mg/kg)</th>
+        <th>Umidade</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of leituras; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ s.data }}</td>
+        <td>{{ s.n }}</td>
+        <td>{{ s.p }}</td>
+        <td>{{ s.k }}</td>
+        <td>{{ (s.umidade * 100) | number:'1.0-0' }}%</td>
+        <td>
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-ideal': s.status === 'Ideal',
+              'badge-alerta': s.status === 'Alerta',
+              'badge-critico': s.status === 'Crítico' || s.status === 'Critico'
+            }"
+          >
+            {{ s.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
