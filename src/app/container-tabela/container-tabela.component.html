@@ -1,40 +1,297 @@
 <div class="painel-container">
-  <h2>{{ titulo }}</h2>
-  <p class="subtitulo">{{ fazenda }}</p>
+  <!-- Cabeçalho Institucional -->
+  <header class="painel-header">
+    <div class="header-brand">
+      <div class="brand-icon" aria-hidden="true">🌱</div>
+      <div>
+        <h2>{{ titulo }}</h2>
+        <p class="subtitulo">{{ fazenda }} • Telemetria e Manejo Agronômico de Precisão</p>
+      </div>
+    </div>
+    <span class="safra-badge">Safra 2026/27</span>
+  </header>
 
-  <table class="tabela-sensores">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Data/Hora</th>
-        <th>N (mg/kg)</th>
-        <th>P (mg/kg)</th>
-        <th>K (mg/kg)</th>
-        <th>Umidade</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let s of leituras; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ s.data }}</td>
-        <td>{{ s.n }}</td>
-        <td>{{ s.p }}</td>
-        <td>{{ s.k }}</td>
-        <td>{{ (s.umidade * 100) | number:'1.0-0' }}%</td>
-        <td>
-          <span
-            class="badge"
-            [ngClass]="{
-              'badge-ideal': s.status === 'Ideal',
-              'badge-alerta': s.status === 'Alerta',
-              'badge-critico': s.status === 'Crítico' || s.status === 'Critico'
-            }"
-          >
-            {{ s.status }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="painel-body">
+    <!-- Cards de Indicadores Rápidos (KPIs) -->
+    <section class="kpi-grid" aria-label="Indicadores rápidos de sensores">
+      <div class="kpi-card kpi-total">
+        <div class="kpi-info">
+          <span class="kpi-label">Total de Sensores</span>
+          <strong class="kpi-value">{{ totalSensores }}</strong>
+        </div>
+        <div class="kpi-icon" aria-hidden="true">📡</div>
+      </div>
+
+      <div class="kpi-card kpi-ideal">
+        <div class="kpi-info">
+          <span class="kpi-label">Solo em Nível Ideal</span>
+          <strong class="kpi-value">{{ totalIdeal }}</strong>
+        </div>
+        <div class="kpi-icon" aria-hidden="true">✔</div>
+      </div>
+
+      <div class="kpi-card kpi-alerta">
+        <div class="kpi-info">
+          <span class="kpi-label">Em Alerta / Atenção</span>
+          <strong class="kpi-value">{{ totalAlerta }}</strong>
+        </div>
+        <div class="kpi-icon" aria-hidden="true">⚠</div>
+      </div>
+
+      <div class="kpi-card kpi-critico">
+        <div class="kpi-info">
+          <span class="kpi-label">Em Estado Crítico</span>
+          <strong class="kpi-value">{{ totalCritico }}</strong>
+        </div>
+        <div class="kpi-icon" aria-hidden="true">❗</div>
+      </div>
+    </section>
+
+    <!-- Barra de Busca, Filtro e Adição de Sensor -->
+    <section class="toolbar" aria-label="Controles de busca e filtragem">
+      <div class="search-box">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar por código, talhão, cultura ou data/hora..."
+          [(ngModel)]="termoBusca"
+        />
+      </div>
+
+      <div class="toolbar-actions">
+        <select class="status-select" [(ngModel)]="filtroStatus" aria-label="Filtrar por status operacional">
+          <option value="Todos">Todos os Status</option>
+          <option value="Ideal">Ideal</option>
+          <option value="Alerta">Alerta</option>
+          <option value="Crítico">Crítico</option>
+        </select>
+
+        <button type="button" class="btn-novo" (click)="abrirModalNovo()">
+          <span>+ Novo Sensor</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Tabela Semântica de Leituras de Solo -->
+    <div class="tabela-wrapper">
+      <table class="tabela-sensores">
+        <thead>
+          <tr>
+            <th># / Identificador</th>
+            <th>Talhão / Lavoura</th>
+            <th>Data/Hora</th>
+            <th>N (mg/kg)</th>
+            <th>P (mg/kg)</th>
+            <th>K (mg/kg)</th>
+            <th>Umidade</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of leiturasFiltradas; let i = index">
+            <td class="col-id">
+              <span>{{ i + 1 }}</span>
+              <span class="id-code" *ngIf="s.id">{{ s.id }}</span>
+            </td>
+            <td>
+              <div class="talhao-info">
+                <span class="talhao-nome">{{ s.talhao || 'Setor 04' }}</span>
+                <span class="cultura-tag" *ngIf="s.cultura">{{ s.cultura }}</span>
+              </div>
+            </td>
+            <td>{{ s.data }}</td>
+            <td class="npk-cell">{{ s.n }}</td>
+            <td class="npk-cell">{{ s.p }}</td>
+            <td class="npk-cell">{{ s.k }}</td>
+            <td>
+              <div class="umidade-wrapper">
+                <span class="umidade-valor">{{ (s.umidade * 100) | number:'1.0-0' }}%</span>
+                <div class="umidade-bar" aria-hidden="true">
+                  <div class="umidade-fill" [style.width.%]="s.umidade * 100"></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'badge-ideal': s.status === 'Ideal',
+                  'badge-alerta': s.status === 'Alerta',
+                  'badge-critico': s.status === 'Crítico' || s.status === 'Critico'
+                }"
+              >
+                {{ s.status }}
+              </span>
+            </td>
+            <td>
+              <div class="acoes-cell">
+                <button
+                  type="button"
+                  class="btn-acao btn-editar"
+                  title="Editar leitura do sensor"
+                  (click)="abrirModalEdicao(s, i)"
+                >
+                  ✎
+                </button>
+                <button
+                  type="button"
+                  class="btn-acao btn-excluir"
+                  title="Excluir leitura do sensor"
+                  (click)="excluirSensor(s)"
+                >
+                  🗑
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="leiturasFiltradas.length === 0">
+            <td colspan="9" class="empty-state">
+              Nenhum sensor encontrado para os filtros selecionados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal de Cadastro e Alteração de Dados dos Sensores -->
+  <div class="modal-backdrop" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ modoEdicao ? 'Alterar Dados do Sensor' : 'Cadastrar Novo Sensor IoT' }}</h3>
+        <button type="button" class="btn-close" (click)="fecharModal()" aria-label="Fechar modal">
+          ×
+        </button>
+      </div>
+
+      <form (ngSubmit)="salvarSensor()">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="sensorId">Identificador (ID)</label>
+              <input
+                id="sensorId"
+                name="sensorId"
+                type="text"
+                class="form-control"
+                [(ngModel)]="formularioSensor.id"
+                readonly
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sensorData">Data / Hora da Coleta</label>
+              <input
+                id="sensorData"
+                name="sensorData"
+                type="text"
+                class="form-control"
+                [(ngModel)]="formularioSensor.data"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sensorTalhao">Talhão / Área</label>
+              <input
+                id="sensorTalhao"
+                name="sensorTalhao"
+                type="text"
+                class="form-control"
+                placeholder="Ex: Talhão 05 - Central"
+                [(ngModel)]="formularioSensor.talhao"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sensorCultura">Cultura Agrícola</label>
+              <select
+                id="sensorCultura"
+                name="sensorCultura"
+                class="form-control"
+                [(ngModel)]="formularioSensor.cultura"
+              >
+                <option *ngFor="let c of culturasDisponiveis" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="sensorN">Nitrogênio - N (mg/kg)</label>
+              <input
+                id="sensorN"
+                name="sensorN"
+                type="number"
+                class="form-control"
+                [(ngModel)]="formularioSensor.n"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sensorP">Fósforo - P (mg/kg)</label>
+              <input
+                id="sensorP"
+                name="sensorP"
+                type="number"
+                class="form-control"
+                [(ngModel)]="formularioSensor.p"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sensorK">Potássio - K (mg/kg)</label>
+              <input
+                id="sensorK"
+                name="sensorK"
+                type="number"
+                class="form-control"
+                [(ngModel)]="formularioSensor.k"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sensorUmidade">Umidade do Solo (%)</label>
+              <input
+                id="sensorUmidade"
+                name="sensorUmidade"
+                type="number"
+                min="0"
+                max="100"
+                class="form-control"
+                [(ngModel)]="formularioSensor.umidadePercentual"
+                (ngModelChange)="atualizarStatusAutomatico()"
+                required
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="sensorStatus">Status Operacional</label>
+              <select
+                id="sensorStatus"
+                name="sensorStatus"
+                class="form-control"
+                [(ngModel)]="formularioSensor.status"
+              >
+                <option value="Ideal">Ideal</option>
+                <option value="Alerta">Alerta</option>
+                <option value="Crítico">Crítico</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancelar" (click)="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn-salvar">
+            {{ modoEdicao ? 'Salvar Alterações' : 'Cadastrar Sensor' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
