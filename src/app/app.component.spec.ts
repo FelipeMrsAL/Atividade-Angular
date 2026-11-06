@@ -20,10 +20,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('agro-sensor-web');
   });
 
-  it('should render title', () => {
+  it('should render container-tabela component', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, agro-sensor-web');
+    expect(compiled.querySelector('app-container-tabela')).toBeTruthy();
   });
 });
