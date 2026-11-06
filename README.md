@@ -1,27 +1,73 @@
-# AgroSensorWeb
+# AgroMonitor IoT — Monitoramento de Sensores de Solo (`agro-sensor-web`)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** para o monitoramento em tempo real de leituras físico-químicas de sensores agrícolas de solo (Nitrogênio, Fósforo, Potássio e Umidade), referente à atividade prática da disciplina de **Desenvolvimento Web — Frameworks Front-End e Fundamentos do Angular** (UniRV).
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 1. Identificação do Aluno
 
-## Code scaffolding
+- **Nome completo:** Felipe Martins de Almeida
+- **Matrícula UniRV:** 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 2. Descrição do Projeto
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+O **AgroMonitor IoT** (`agro-sensor-web`) apresenta o **Painel de Monitoramento IoT - Sensores de Solo** da **Fazenda Modelo UniRV - Setor de Irrigação 04**. Seu objetivo é fornecer uma interface reativa, tipada e responsiva para visualização e gerenciamento de métricas coletadas em lavouras:
 
-## Running unit tests
+- **Indicadores Rápidos (KPIs):** Contagem automática do total de sensores monitorados e distribuição por status operacional (*Ideal*, *Alerta* e *Crítico*).
+- **Tabela Semântica de Telemetria:** Exibição estruturada de Identificador, Talhão/Cultura, Data/Hora da coleta, teores nutricionais de **N (mg/kg)**, **P (mg/kg)** e **K (mg/kg)**, **Umidade do Solo (%)** convertida a partir de valores decimais e distintivos visuais coloridos (*badges*) de **Status Operacional**.
+- **Busca e Filtragem:** Pesquisa instantânea por código do sensor, talhão, cultura agrícola ou data/hora, além de filtro rápido por status operacional.
+- **Gerenciamento de Sensores (CRUD):** Cadastro de novas leituras e alteração/exclusão de registros existentes por meio de modal interativo com cálculo automático de status operacional.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## 3. Tecnologias Utilizadas
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- **Angular 18** (`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/router`)
+- **Angular CLI** (`@angular/cli`)
+- **TypeScript 5.5**
+- **HTML5 Semântico**
+- **CSS3 Responsivo** (Flexbox, CSS Grid, Custom Badges, Zebra Table)
+- **Karma + Jasmine** (Testes unitários automatizados)
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 4. Instalação
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/FelipeMrsAL/Atividade-Angular.git
+cd Atividade-Angular
+```
+
+2. Instale as dependências do projeto:
+
+```bash
+npm install
+```
+
+---
+
+## 5. Inicialização
+
+Para iniciar o servidor de desenvolvimento local, execute:
+
+```bash
+ng serve
+```
+
+> Caso prefira executar via script do `npm`, também é possível utilizar `npm start`.
+
+Após a compilação, acesse a aplicação no navegador em:
+
+**[http://localhost:4200](http://localhost:4200)**
+
+---
+
+## 6. Captura de Tela da Aplicação
+
+Captura de tela real da aplicação **AgroMonitor IoT** renderizada no navegador em `http://localhost:4200`:
+
+![Painel de Monitoramento IoT - Sensores de Solo](docs/screenshots/painel-sensores.png)
