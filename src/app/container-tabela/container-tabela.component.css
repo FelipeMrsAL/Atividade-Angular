@@ -245,6 +245,14 @@
   vertical-align: middle;
 }
 
+.tabela-sensores tbody tr:nth-child(even) {
+  background-color: #fafcfa;
+}
+
+.tabela-sensores tbody tr:hover {
+  background-color: #f3f8f5;
+}
+
 .tabela-sensores tbody tr:last-child td {
   border-bottom: none;
 }

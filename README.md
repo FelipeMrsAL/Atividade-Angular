@@ -13,19 +13,17 @@ Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** (arqui
 
 ## 2. Descrição do Projeto
 
-O projeto implementa integralmente:
+O projeto implementa a aplicação **AgroMonitor IoT** seguindo todas as etapas e protótipos de referência do documento da atividade prática:
 
-1. **Protótipo de Referência AgroMonitor IoT (Figuras 1, 2 e 3 do documento):**
-   - Cabeçalho institucional **AgroMonitor IoT** (*Telemetria e Manejo Agronômico de Precisão • UniRV* | *Safra 2026/2*).
-   - Cards de indicadores rápidos (**KPIs**): *Total de Sensores (5)*, *Solo em Nível Ideal (2)*, *Em Alerta / Atenção (2)* e *Em Estado Crítico (1)*.
-   - Barra de busca instantânea por código, talhão ou cultura, filtro dropdown por status operacional e botão **+ Novo Sensor**.
-   - Tabela de telemetria com as colunas **Identificador**, **Talhão / Lavoura**, **Nutrientes N-P-K (mg/kg)**, **Umidade Solo**, **Status Operacional**, **Última Telemetria** e **Ações** (edição e exclusão) com os sensores `SNS-001` a `SNS-005`.
-   - Modais **Cadastrar Novo Sensor IoT** (Figura 2) e **Alterar Dados do Sensor** (Figura 3).
-
-2. **Componente e Tabela Passo a Passo (Etapas 1 a 6 do enunciado):**
-   - Interface `LeituraSolo` em `src/app/interfaces/sensores.interface.ts`.
-   - Componente `ContainerTabelaComponent` (`app-container-tabela`) declarado no `AppModule` (`src/app/app.module.ts`).
-   - Cabeçalho interpolado (`{{ titulo }}` e `{{ fazenda }}`) e tabela semântica `.tabela-sensores` com as 7 colunas exigidas (`#`, `Data / Hora`, `N (mg/kg)`, `P (mg/kg)`, `K (mg/kg)`, `Umidade`, `Status`), exibindo as 4 leituras de teste obrigatórias com cabeçalho escuro, efeito zebra e *badges* coloridos.
+- **Etapa 1 — Criação do Projeto (`agro-sensor-web`):** Estruturado com Angular CLI, roteamento (`AppRoutingModule`), `AppModule` (`src/app/app.module.ts`) e `.gitignore` configurado para não versionar `node_modules/`.
+- **Etapa 2 — Interface de Dados (`LeituraSolo`):** Definida em `src/app/interfaces/sensores.interface.ts` tipando `id?`, `data`, `n` (Nitrogênio em mg/kg), `p` (Fósforo em mg/kg), `k` (Potássio em mg/kg), `umidade` (decimal convertido para `%`) e `status?` (`Ideal`, `Alerta`, `Crítico`), além de `talhao?` e `cultura?`.
+- **Etapas 3, 4 e 5 — Componente `container-tabela` e Protótipos de Referência (Figuras 1, 2 e 3):**
+  - Cabeçalho institucional interpolado (`{{ titulo }}` e `{{ fazenda }}`) com selo `Safra 2026/2`.
+  - Cards de indicadores rápidos (**KPIs**) no topo com contadores automáticos (*Total de Sensores*, *Solo em Nível Ideal*, *Em Alerta / Atenção* e *Em Estado Crítico*).
+  - Barra de busca instantânea (por código, talhão ou cultura), filtro dropdown por status operacional e botão **+ Novo Sensor**.
+  - Tabela semântica `.tabela-sensores` iterada com `*ngFor`, apresentando Identificador, Talhão/Lavoura, Nutrientes N-P-K (mg/kg), Umidade do Solo (`s.umidade * 100`%), distintivos visuais coloridos (`.badge`) para o Status Operacional, Última Telemetria (Data/Hora) e botões de Ações (edição e exclusão).
+  - Modais **Cadastrar Novo Sensor IoT** (Figura 2) e **Alterar Dados do Sensor** (Figura 3).
+- **Etapa 6 — Integração no Componente Raiz:** Componente integrado em `src/app/app.component.html` por meio do seletor `<app-container-tabela></app-container-tabela>`.
 
 ---
 
@@ -41,15 +39,10 @@ O projeto implementa integralmente:
 
 ## 4. Instruções de Instalação e Inicialização
 
-Você pode executar o projeto diretamente na raiz do repositório ou dentro da pasta `agro-sensor-web/`:
-
 ```bash
 # 1. Clonar o repositório
 git clone https://github.com/FelipeMrsAL/Atividade-Angular.git
 cd Atividade-Angular
-
-# (Opcional, conforme Etapa 1 do roteiro)
-cd agro-sensor-web
 
 # 2. Instalar as dependências
 npm install
@@ -66,4 +59,4 @@ A aplicação estará disponível no navegador em:
 
 ## 5. Captura de Tela da Aplicação (`http://localhost:4200`)
 
-![Painel de Monitoramento IoT - Sensores de Solo renderizado em http://localhost:4200](docs/screenshots/painel-sensores.png)
+![AgroMonitor IoT renderizado em http://localhost:4200](docs/screenshots/painel-sensores.png)
