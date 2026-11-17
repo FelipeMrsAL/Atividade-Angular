@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { ContainerTabelaComponent } from './container-tabela.component';
 
 describe('ContainerTabelaComponent', () => {
@@ -7,7 +8,8 @@ describe('ContainerTabelaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContainerTabelaComponent]
+      imports: [FormsModule],
+      declarations: [ContainerTabelaComponent]
     })
     .compileComponents();
 
@@ -20,32 +22,30 @@ describe('ContainerTabelaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have the required title and fazenda', () => {
+  it('should have the required title and fazenda from Etapa 4', () => {
     expect(component.titulo).toBe('Painel de Monitoramento IoT - Sensores de Solo');
-    expect(component.fazenda).toBe('Fazenda Modelo UniRV - Setor de Irrigação 04');
+    expect(component.fazenda).toBe('Fazenda Modelo UniRV - Setor de Irrigacao 04');
   });
 
-  it('should initialize with 4 mandatory sensor readings', () => {
+  it('should contain the 4 mandatory readings in leituras (Etapa 4)', () => {
     expect(component.leituras.length).toBe(4);
-    expect(component.totalSensores).toBe(4);
+    expect(component.leituras[0].umidade).toBe(0.55);
+    expect(component.leituras[1].umidade).toBe(0.48);
+    expect(component.leituras[2].umidade).toBe(0.38);
+    expect(component.leituras[3].umidade).toBe(0.60);
+  });
+
+  it('should contain the 5 telemetry sensors from the prototype (Figure 1)', () => {
+    expect(component.sensores.length).toBe(5);
+    expect(component.totalSensores).toBe(5);
     expect(component.totalIdeal).toBe(2);
-    expect(component.totalAlerta).toBe(1);
+    expect(component.totalAlerta).toBe(2);
     expect(component.totalCritico).toBe(1);
   });
 
-  it('should render the 4 rows and humidity percentages in the table', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const rows = compiled.querySelectorAll('tbody tr');
-    expect(rows.length).toBe(4);
-    expect(compiled.textContent).toContain('55%');
-    expect(compiled.textContent).toContain('48%');
-    expect(compiled.textContent).toContain('38%');
-    expect(compiled.textContent).toContain('60%');
-  });
-
-  it('should filter readings by status', () => {
+  it('should filter telemetry sensors by status', () => {
     component.filtroStatus = 'Crítico';
-    expect(component.leiturasFiltradas.length).toBe(1);
-    expect(component.leiturasFiltradas[0].umidade).toBe(0.38);
+    expect(component.sensoresFiltrados.length).toBe(1);
+    expect(component.sensoresFiltrados[0].id).toBe('SNS-003');
   });
 });

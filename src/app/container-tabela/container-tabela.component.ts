@@ -1,69 +1,85 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { LeituraSolo, StatusSensor } from '../interfaces/sensores.interface';
+import { LeituraSolo } from '../interfaces/sensores.interface';
 
 @Component({
   selector: 'app-container-tabela',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './container-tabela.component.html',
   styleUrls: ['./container-tabela.component.css']
 })
 export class ContainerTabelaComponent implements OnInit {
   titulo: string = 'Painel de Monitoramento IoT - Sensores de Solo';
-  fazenda: string = 'Fazenda Modelo UniRV - Setor de Irrigação 04';
+  fazenda: string = 'Fazenda Modelo UniRV - Setor de Irrigacao 04';
 
+  // Dados de teste obrigatórios da Etapa 4 do documento
   leituras: LeituraSolo[] = [
+    { data: '04/11/2026 08:00', n: 150, p: 110, k: 125, umidade: 0.55, status: 'Ideal' },
+    { data: '04/11/2026 09:30', n: 142, p: 105, k: 118, umidade: 0.48, status: 'Alerta' },
+    { data: '04/11/2026 11:00', n: 130, p: 98, k: 110, umidade: 0.38, status: 'Critico' },
+    { data: '04/11/2026 12:30', n: 155, p: 112, k: 130, umidade: 0.60, status: 'Ideal' }
+  ];
+
+  // Dados do Protótipo de Referência AgroMonitor IoT (Figura 1, 2 e 3)
+  sensores: LeituraSolo[] = [
     {
       id: 'SNS-001',
-      talhao: 'Talhão 01 - Norte',
+      talhao: 'Talhão 12 - Norte',
       cultura: 'Soja',
-      data: '04/11/2026 08:00',
-      n: 150,
-      p: 110,
-      k: 125,
-      umidade: 0.55,
-      status: 'Ideal'
+      n: 165,
+      p: 120,
+      k: 140,
+      umidade: 0.62,
+      status: 'Ideal',
+      data: '2026-11-04 11:45'
     },
     {
       id: 'SNS-002',
-      talhao: 'Talhão 02 - Sul',
+      talhao: 'Talhão 04 - Sul',
       cultura: 'Milho',
-      data: '04/11/2026 09:30',
-      n: 142,
-      p: 105,
-      k: 118,
-      umidade: 0.48,
-      status: 'Alerta'
+      n: 110,
+      p: 85,
+      k: 95,
+      umidade: 0.38,
+      status: 'Alerta',
+      data: '2026-11-04 11:30'
     },
     {
       id: 'SNS-003',
-      talhao: 'Talhão 03 - Leste',
+      talhao: 'Talhão 08 - Leste',
       cultura: 'Algodão',
-      data: '04/11/2026 11:00',
-      n: 130,
-      p: 98,
-      k: 110,
-      umidade: 0.38,
-      status: 'Crítico'
+      n: 70,
+      p: 50,
+      k: 60,
+      umidade: 0.18,
+      status: 'Crítico',
+      data: '2026-11-04 11:15'
     },
     {
       id: 'SNS-004',
-      talhao: 'Talhão 04 - Oeste',
+      talhao: 'Talhão 15 - Oeste',
       cultura: 'Soja',
-      data: '04/11/2026 12:30',
       n: 155,
-      p: 112,
+      p: 115,
       k: 130,
-      umidade: 0.60,
-      status: 'Ideal'
+      umidade: 0.58,
+      status: 'Ideal',
+      data: '2026-11-04 11:00'
+    },
+    {
+      id: 'SNS-005',
+      talhao: 'Talhão 02 - Central',
+      cultura: 'Sorgo',
+      n: 95,
+      p: 75,
+      k: 88,
+      umidade: 0.32,
+      status: 'Alerta',
+      data: '2026-11-04 10:45'
     }
   ];
 
   termoBusca: string = '';
   filtroStatus: string = 'Todos';
-  culturasDisponiveis: string[] = ['Soja', 'Milho', 'Algodão', 'Sorgo', 'Café'];
+  culturasDisponiveis: string[] = ['Soja', 'Milho', 'Algodão', 'Sorgo', 'Café', 'Cana-de-Açúcar'];
 
   modalAberto: boolean = false;
   modoEdicao: boolean = false;
@@ -73,90 +89,116 @@ export class ContainerTabelaComponent implements OnInit {
     id: string;
     talhao: string;
     cultura: string;
-    data: string;
-    n: number;
-    p: number;
-    k: number;
-    umidadePercentual: number;
-    status: StatusSensor;
-  } = this.criarFormularioPadrao();
+    umidadePercentual: number | null;
+    n: number | null;
+    p: number | null;
+    k: number | null;
+    status: string;
+  } = {
+    id: 'SNS-006',
+    talhao: '',
+    cultura: 'Soja',
+    umidadePercentual: null,
+    n: null,
+    p: null,
+    k: null,
+    status: 'Ideal'
+  };
 
   constructor() { }
 
   ngOnInit(): void { }
 
-  get leiturasFiltradas(): LeituraSolo[] {
-    return this.leituras.filter((item) => {
+  get sensoresFiltrados(): LeituraSolo[] {
+    return this.sensores.filter((s) => {
       const termo = this.termoBusca.trim().toLowerCase();
-      const correspondeBusca =
+      const bateBusca =
         !termo ||
-        (item.id && item.id.toLowerCase().includes(termo)) ||
-        (item.talhao && item.talhao.toLowerCase().includes(termo)) ||
-        (item.cultura && item.cultura.toLowerCase().includes(termo)) ||
-        item.data.toLowerCase().includes(termo);
+        (s.id && s.id.toLowerCase().includes(termo)) ||
+        (s.talhao && s.talhao.toLowerCase().includes(termo)) ||
+        (s.cultura && s.cultura.toLowerCase().includes(termo));
 
-      const correspondeStatus =
-        this.filtroStatus === 'Todos' || item.status === this.filtroStatus;
+      const statusNormalizado = this.normalizarStatus(s.status);
+      const filtroNormalizado = this.normalizarStatus(this.filtroStatus);
+      const bateStatus =
+        this.filtroStatus === 'Todos' || statusNormalizado === filtroNormalizado;
 
-      return correspondeBusca && correspondeStatus;
+      return bateBusca && bateStatus;
     });
   }
 
   get totalSensores(): number {
-    return this.leituras.length;
+    return this.sensores.length;
   }
 
   get totalIdeal(): number {
-    return this.leituras.filter((s) => s.status === 'Ideal').length;
+    return this.sensores.filter((s) => this.normalizarStatus(s.status) === 'ideal').length;
   }
 
   get totalAlerta(): number {
-    return this.leituras.filter((s) => s.status === 'Alerta').length;
+    return this.sensores.filter((s) => this.normalizarStatus(s.status) === 'alerta').length;
   }
 
   get totalCritico(): number {
-    return this.leituras.filter(
-      (s) => s.status === 'Crítico' || s.status === 'Critico'
-    ).length;
+    return this.sensores.filter((s) => this.normalizarStatus(s.status) === 'critico').length;
   }
 
-  private criarFormularioPadrao() {
-    const proximoNumero = this.leituras ? this.leituras.length + 1 : 5;
-    const idGerado = `SNS-${String(proximoNumero).padStart(3, '0')}`;
-    return {
-      id: idGerado,
-      talhao: '',
-      cultura: 'Soja',
-      data: '04/11/2026 14:00',
-      n: 145,
-      p: 105,
-      k: 120,
-      umidadePercentual: 55,
-      status: 'Ideal' as StatusSensor
-    };
+  normalizarStatus(status?: string): string {
+    if (!status) return 'ideal';
+    const valor = status.toLowerCase();
+    if (valor.includes('crit') || valor.includes('crít')) return 'critico';
+    if (valor.includes('alert')) return 'alerta';
+    return 'ideal';
+  }
+
+  obterClasseBadge(status?: string): string {
+    const tipo = this.normalizarStatus(status);
+    if (tipo === 'critico') return 'badge-critico';
+    if (tipo === 'alerta') return 'badge-alerta';
+    return 'badge-ideal';
+  }
+
+  formatarStatusUpper(status?: string): string {
+    const tipo = this.normalizarStatus(status);
+    if (tipo === 'critico') return 'CRÍTICO';
+    if (tipo === 'alerta') return 'ALERTA';
+    return 'IDEAL';
   }
 
   abrirModalNovo(): void {
     this.modoEdicao = false;
     this.indiceEdicao = null;
-    this.formularioSensor = this.criarFormularioPadrao();
+    const proximoNum = this.sensores.length + 1;
+    this.formularioSensor = {
+      id: `SNS-${String(proximoNum).padStart(3, '0')}`,
+      talhao: '',
+      cultura: 'Soja',
+      umidadePercentual: null,
+      n: null,
+      p: null,
+      k: null,
+      status: 'Ideal'
+    };
     this.modalAberto = true;
   }
 
-  abrirModalEdicao(leitura: LeituraSolo, index: number): void {
-    const indiceOriginal = this.leituras.indexOf(leitura);
+  abrirModalEdicao(sensor: LeituraSolo, index: number): void {
+    const idxReal = this.sensores.indexOf(sensor);
     this.modoEdicao = true;
-    this.indiceEdicao = indiceOriginal !== -1 ? indiceOriginal : index;
+    this.indiceEdicao = idxReal !== -1 ? idxReal : index;
+    const statusTipo = this.normalizarStatus(sensor.status);
+    const statusLabel =
+      statusTipo === 'critico' ? 'Crítico' : statusTipo === 'alerta' ? 'Alerta' : 'Ideal';
+
     this.formularioSensor = {
-      id: leitura.id || `SNS-${String(index + 1).padStart(3, '0')}`,
-      talhao: leitura.talhao || `Setor 0${index + 1}`,
-      cultura: leitura.cultura || 'Soja',
-      data: leitura.data,
-      n: leitura.n,
-      p: leitura.p,
-      k: leitura.k,
-      umidadePercentual: Math.round(leitura.umidade * 100),
-      status: (leitura.status as StatusSensor) || 'Ideal'
+      id: sensor.id || `SNS-${String(index + 1).padStart(3, '0')}`,
+      talhao: sensor.talhao || '',
+      cultura: sensor.cultura || 'Soja',
+      umidadePercentual: Math.round(sensor.umidade * 100),
+      n: sensor.n,
+      p: sensor.p,
+      k: sensor.k,
+      status: statusLabel
     };
     this.modalAberto = true;
   }
@@ -165,44 +207,55 @@ export class ContainerTabelaComponent implements OnInit {
     this.modalAberto = false;
   }
 
-  atualizarStatusAutomatico(): void {
-    const u = Number(this.formularioSensor.umidadePercentual);
-    if (u >= 50) {
-      this.formularioSensor.status = 'Ideal';
-    } else if (u >= 40) {
-      this.formularioSensor.status = 'Alerta';
-    } else {
-      this.formularioSensor.status = 'Crítico';
-    }
-  }
-
   salvarSensor(): void {
-    const umidadeDecimal = Number((this.formularioSensor.umidadePercentual / 100).toFixed(2));
-    const registro: LeituraSolo = {
-      id: this.formularioSensor.id.trim() || `SNS-${String(this.leituras.length + 1).padStart(3, '0')}`,
-      talhao: this.formularioSensor.talhao.trim() || 'Talhão Padrão',
-      cultura: this.formularioSensor.cultura,
-      data: this.formularioSensor.data.trim() || '04/11/2026 14:00',
-      n: Number(this.formularioSensor.n),
-      p: Number(this.formularioSensor.p),
-      k: Number(this.formularioSensor.k),
-      umidade: umidadeDecimal,
-      status: this.formularioSensor.status
+    const umidadePct =
+      this.formularioSensor.umidadePercentual !== null &&
+      this.formularioSensor.umidadePercentual !== undefined
+        ? Number(this.formularioSensor.umidadePercentual)
+        : 55;
+    const nVal =
+      this.formularioSensor.n !== null && this.formularioSensor.n !== undefined
+        ? Number(this.formularioSensor.n)
+        : 150;
+    const pVal =
+      this.formularioSensor.p !== null && this.formularioSensor.p !== undefined
+        ? Number(this.formularioSensor.p)
+        : 110;
+    const kVal =
+      this.formularioSensor.k !== null && this.formularioSensor.k !== undefined
+        ? Number(this.formularioSensor.k)
+        : 125;
+
+    const dataAtual =
+      this.modoEdicao && this.indiceEdicao !== null
+        ? this.sensores[this.indiceEdicao].data
+        : '2026-11-04 12:00';
+
+    const novoRegistro: LeituraSolo = {
+      id: this.formularioSensor.id.trim() || `SNS-${String(this.sensores.length + 1).padStart(3, '0')}`,
+      talhao: this.formularioSensor.talhao.trim() || 'Talhão 04 - Sul',
+      cultura: this.formularioSensor.cultura || 'Soja',
+      n: nVal,
+      p: pVal,
+      k: kVal,
+      umidade: Number((umidadePct / 100).toFixed(2)),
+      status: this.formularioSensor.status,
+      data: dataAtual
     };
 
     if (this.modoEdicao && this.indiceEdicao !== null) {
-      this.leituras[this.indiceEdicao] = registro;
+      this.sensores[this.indiceEdicao] = novoRegistro;
     } else {
-      this.leituras.push(registro);
+      this.sensores.unshift(novoRegistro);
     }
 
     this.fecharModal();
   }
 
-  excluirSensor(leitura: LeituraSolo): void {
-    const idx = this.leituras.indexOf(leitura);
+  excluirSensor(sensor: LeituraSolo): void {
+    const idx = this.sensores.indexOf(sensor);
     if (idx !== -1) {
-      this.leituras.splice(idx, 1);
+      this.sensores.splice(idx, 1);
     }
   }
 }
