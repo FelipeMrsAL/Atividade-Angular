@@ -1,6 +1,6 @@
 # AgroMonitor IoT — Monitoramento de Sensores de Solo (`agro-sensor-web`)
 
-Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** para o monitoramento em tempo real de leituras físico-químicas de sensores agrícolas de solo (Nitrogênio, Fósforo, Potássio e Umidade), referente à atividade prática da disciplina de **Desenvolvimento Web — Frameworks Front-End e Fundamentos do Angular** (UniRV).
+Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** (arquitetura modular com `AppModule` e TypeScript) para a visualização e gerenciamento de leituras físico-químicas de sensores agrícolas de solo, referente à atividade prática da disciplina **Desenvolvimento Web — Frameworks Front-End e Fundamentos do Angular** (Prof. Me. Sergio Souza Novak — UniRV).
 
 ---
 
@@ -13,61 +13,57 @@ Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** para o
 
 ## 2. Descrição do Projeto
 
-O **AgroMonitor IoT** (`agro-sensor-web`) apresenta o **Painel de Monitoramento IoT - Sensores de Solo** da **Fazenda Modelo UniRV - Setor de Irrigação 04**. Seu objetivo é fornecer uma interface reativa, tipada e responsiva para visualização e gerenciamento de métricas coletadas em lavouras:
+O projeto implementa integralmente:
 
-- **Indicadores Rápidos (KPIs):** Contagem automática do total de sensores monitorados e distribuição por status operacional (*Ideal*, *Alerta* e *Crítico*).
-- **Tabela Semântica de Telemetria:** Exibição estruturada de Identificador, Talhão/Cultura, Data/Hora da coleta, teores nutricionais de **N (mg/kg)**, **P (mg/kg)** e **K (mg/kg)**, **Umidade do Solo (%)** convertida a partir de valores decimais e distintivos visuais coloridos (*badges*) de **Status Operacional**.
-- **Busca e Filtragem:** Pesquisa instantânea por código do sensor, talhão, cultura agrícola ou data/hora, além de filtro rápido por status operacional.
-- **Gerenciamento de Sensores (CRUD):** Cadastro de novas leituras e alteração/exclusão de registros existentes por meio de modal interativo com cálculo automático de status operacional.
+1. **Protótipo de Referência AgroMonitor IoT (Figuras 1, 2 e 3 do documento):**
+   - Cabeçalho institucional **AgroMonitor IoT** (*Telemetria e Manejo Agronômico de Precisão • UniRV* | *Safra 2026/2*).
+   - Cards de indicadores rápidos (**KPIs**): *Total de Sensores (5)*, *Solo em Nível Ideal (2)*, *Em Alerta / Atenção (2)* e *Em Estado Crítico (1)*.
+   - Barra de busca instantânea por código, talhão ou cultura, filtro dropdown por status operacional e botão **+ Novo Sensor**.
+   - Tabela de telemetria com as colunas **Identificador**, **Talhão / Lavoura**, **Nutrientes N-P-K (mg/kg)**, **Umidade Solo**, **Status Operacional**, **Última Telemetria** e **Ações** (edição e exclusão) com os sensores `SNS-001` a `SNS-005`.
+   - Modais **Cadastrar Novo Sensor IoT** (Figura 2) e **Alterar Dados do Sensor** (Figura 3).
+
+2. **Componente e Tabela Passo a Passo (Etapas 1 a 6 do enunciado):**
+   - Interface `LeituraSolo` em `src/app/interfaces/sensores.interface.ts`.
+   - Componente `ContainerTabelaComponent` (`app-container-tabela`) declarado no `AppModule` (`src/app/app.module.ts`).
+   - Cabeçalho interpolado (`{{ titulo }}` e `{{ fazenda }}`) e tabela semântica `.tabela-sensores` com as 7 colunas exigidas (`#`, `Data / Hora`, `N (mg/kg)`, `P (mg/kg)`, `K (mg/kg)`, `Umidade`, `Status`), exibindo as 4 leituras de teste obrigatórias com cabeçalho escuro, efeito zebra e *badges* coloridos.
 
 ---
 
 ## 3. Tecnologias Utilizadas
 
-- **Angular 18** (`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/router`)
+- **Angular 18** (`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/platform-browser`, `@angular/router`)
 - **Angular CLI** (`@angular/cli`)
 - **TypeScript 5.5**
-- **HTML5 Semântico**
-- **CSS3 Responsivo** (Flexbox, CSS Grid, Custom Badges, Zebra Table)
-- **Karma + Jasmine** (Testes unitários automatizados)
+- **HTML5 Semântico e CSS3 Responsivo**
+- **Karma + Jasmine** (Testes unitários)
 
 ---
 
-## 4. Instalação
+## 4. Instruções de Instalação e Inicialização
 
-1. Clone o repositório:
+Você pode executar o projeto diretamente na raiz do repositório ou dentro da pasta `agro-sensor-web/`:
 
 ```bash
+# 1. Clonar o repositório
 git clone https://github.com/FelipeMrsAL/Atividade-Angular.git
 cd Atividade-Angular
-```
 
-2. Instale as dependências do projeto:
+# (Opcional, conforme Etapa 1 do roteiro)
+cd agro-sensor-web
 
-```bash
+# 2. Instalar as dependências
 npm install
-```
 
----
-
-## 5. Inicialização
-
-Para iniciar o servidor de desenvolvimento local, execute:
-
-```bash
+# 3. Iniciar o servidor local de desenvolvimento
 ng serve
 ```
 
-> Caso prefira executar via script do `npm`, também é possível utilizar `npm start`.
-
-Após a compilação, acesse a aplicação no navegador em:
+A aplicação estará disponível no navegador em:
 
 **[http://localhost:4200](http://localhost:4200)**
 
 ---
 
-## 6. Captura de Tela da Aplicação
+## 5. Captura de Tela da Aplicação (`http://localhost:4200`)
 
-Captura de tela real da aplicação **AgroMonitor IoT** renderizada no navegador em `http://localhost:4200`:
-
-![Painel de Monitoramento IoT - Sensores de Solo](docs/screenshots/painel-sensores.png)
+![Painel de Monitoramento IoT - Sensores de Solo renderizado em http://localhost:4200](docs/screenshots/painel-sensores.png)
