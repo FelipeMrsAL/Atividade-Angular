@@ -6,7 +6,7 @@ Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** (arqui
 
 ## 1. Identificação do Aluno
 
-- **Nome completo:** Felipe Martins de Almeida
+- **Nome completo:** Felipe Martins de Almeida e Maria Eduarda Costa Toledo
 - **Matrícula UniRV:** 
 
 ---
