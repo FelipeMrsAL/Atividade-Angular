@@ -22,30 +22,22 @@ describe('ContainerTabelaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have the required title and fazenda from Etapa 4', () => {
-    expect(component.titulo).toBe('Painel de Monitoramento IoT - Sensores de Solo');
-    expect(component.fazenda).toBe('Fazenda Modelo UniRV - Setor de Irrigacao 04');
+  it('should have AgroMonitor IoT title and subtitle', () => {
+    expect(component.titulo).toBe('AgroMonitor IoT');
+    expect(component.fazenda).toBe('Telemetria e Manejo Agronômico de Precisão • UniRV');
   });
 
-  it('should contain the 4 mandatory readings in leituras (Etapa 4)', () => {
-    expect(component.leituras.length).toBe(4);
-    expect(component.leituras[0].umidade).toBe(0.55);
-    expect(component.leituras[1].umidade).toBe(0.48);
-    expect(component.leituras[2].umidade).toBe(0.38);
-    expect(component.leituras[3].umidade).toBe(0.60);
-  });
-
-  it('should contain the 5 telemetry sensors from the prototype (Figure 1)', () => {
-    expect(component.sensores.length).toBe(5);
+  it('should contain the 5 telemetry sensors in leituras', () => {
+    expect(component.leituras.length).toBe(5);
     expect(component.totalSensores).toBe(5);
     expect(component.totalIdeal).toBe(2);
     expect(component.totalAlerta).toBe(2);
     expect(component.totalCritico).toBe(1);
   });
 
-  it('should filter telemetry sensors by status', () => {
+  it('should filter readings by status', () => {
     component.filtroStatus = 'Crítico';
-    expect(component.sensoresFiltrados.length).toBe(1);
-    expect(component.sensoresFiltrados[0].id).toBe('SNS-003');
+    expect(component.leiturasFiltradas.length).toBe(1);
+    expect(component.leiturasFiltradas[0].id).toBe('SNS-003');
   });
 });

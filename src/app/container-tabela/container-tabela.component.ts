@@ -7,19 +7,10 @@ import { LeituraSolo } from '../interfaces/sensores.interface';
   styleUrls: ['./container-tabela.component.css']
 })
 export class ContainerTabelaComponent implements OnInit {
-  titulo: string = 'Painel de Monitoramento IoT - Sensores de Solo';
-  fazenda: string = 'Fazenda Modelo UniRV - Setor de Irrigacao 04';
+  titulo: string = 'AgroMonitor IoT';
+  fazenda: string = 'Telemetria e Manejo Agronômico de Precisão • UniRV';
 
-  // Dados de teste obrigatórios da Etapa 4 do documento
   leituras: LeituraSolo[] = [
-    { data: '04/11/2026 08:00', n: 150, p: 110, k: 125, umidade: 0.55, status: 'Ideal' },
-    { data: '04/11/2026 09:30', n: 142, p: 105, k: 118, umidade: 0.48, status: 'Alerta' },
-    { data: '04/11/2026 11:00', n: 130, p: 98, k: 110, umidade: 0.38, status: 'Critico' },
-    { data: '04/11/2026 12:30', n: 155, p: 112, k: 130, umidade: 0.60, status: 'Ideal' }
-  ];
-
-  // Dados do Protótipo de Referência AgroMonitor IoT (Figura 1, 2 e 3)
-  sensores: LeituraSolo[] = [
     {
       id: 'SNS-001',
       talhao: 'Talhão 12 - Norte',
@@ -109,8 +100,8 @@ export class ContainerTabelaComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  get sensoresFiltrados(): LeituraSolo[] {
-    return this.sensores.filter((s) => {
+  get leiturasFiltradas(): LeituraSolo[] {
+    return this.leituras.filter((s) => {
       const termo = this.termoBusca.trim().toLowerCase();
       const bateBusca =
         !termo ||
@@ -128,19 +119,19 @@ export class ContainerTabelaComponent implements OnInit {
   }
 
   get totalSensores(): number {
-    return this.sensores.length;
+    return this.leituras.length;
   }
 
   get totalIdeal(): number {
-    return this.sensores.filter((s) => this.normalizarStatus(s.status) === 'ideal').length;
+    return this.leituras.filter((s) => this.normalizarStatus(s.status) === 'ideal').length;
   }
 
   get totalAlerta(): number {
-    return this.sensores.filter((s) => this.normalizarStatus(s.status) === 'alerta').length;
+    return this.leituras.filter((s) => this.normalizarStatus(s.status) === 'alerta').length;
   }
 
   get totalCritico(): number {
-    return this.sensores.filter((s) => this.normalizarStatus(s.status) === 'critico').length;
+    return this.leituras.filter((s) => this.normalizarStatus(s.status) === 'critico').length;
   }
 
   normalizarStatus(status?: string): string {
@@ -168,7 +159,7 @@ export class ContainerTabelaComponent implements OnInit {
   abrirModalNovo(): void {
     this.modoEdicao = false;
     this.indiceEdicao = null;
-    const proximoNum = this.sensores.length + 1;
+    const proximoNum = this.leituras.length + 1;
     this.formularioSensor = {
       id: `SNS-${String(proximoNum).padStart(3, '0')}`,
       talhao: '',
@@ -183,7 +174,7 @@ export class ContainerTabelaComponent implements OnInit {
   }
 
   abrirModalEdicao(sensor: LeituraSolo, index: number): void {
-    const idxReal = this.sensores.indexOf(sensor);
+    const idxReal = this.leituras.indexOf(sensor);
     this.modoEdicao = true;
     this.indiceEdicao = idxReal !== -1 ? idxReal : index;
     const statusTipo = this.normalizarStatus(sensor.status);
@@ -228,11 +219,11 @@ export class ContainerTabelaComponent implements OnInit {
 
     const dataAtual =
       this.modoEdicao && this.indiceEdicao !== null
-        ? this.sensores[this.indiceEdicao].data
+        ? this.leituras[this.indiceEdicao].data
         : '2026-11-04 12:00';
 
     const novoRegistro: LeituraSolo = {
-      id: this.formularioSensor.id.trim() || `SNS-${String(this.sensores.length + 1).padStart(3, '0')}`,
+      id: this.formularioSensor.id.trim() || `SNS-${String(this.leituras.length + 1).padStart(3, '0')}`,
       talhao: this.formularioSensor.talhao.trim() || 'Talhão 04 - Sul',
       cultura: this.formularioSensor.cultura || 'Soja',
       n: nVal,
@@ -244,18 +235,18 @@ export class ContainerTabelaComponent implements OnInit {
     };
 
     if (this.modoEdicao && this.indiceEdicao !== null) {
-      this.sensores[this.indiceEdicao] = novoRegistro;
+      this.leituras[this.indiceEdicao] = novoRegistro;
     } else {
-      this.sensores.unshift(novoRegistro);
+      this.leituras.unshift(novoRegistro);
     }
 
     this.fecharModal();
   }
 
   excluirSensor(sensor: LeituraSolo): void {
-    const idx = this.sensores.indexOf(sensor);
+    const idx = this.leituras.indexOf(sensor);
     if (idx !== -1) {
-      this.sensores.splice(idx, 1);
+      this.leituras.splice(idx, 1);
     }
   }
 }

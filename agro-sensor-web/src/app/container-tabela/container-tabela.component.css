@@ -7,15 +7,12 @@
   color: #1e293b;
 }
 
-.agro-wrapper {
+.painel-container {
   max-width: 1120px;
   margin: 0 auto;
 }
 
-/* ==========================================================================
-   1. ESTILOS DO PROTÓTIPO AGROMONITOR IoT (FIGURAS 1, 2 E 3)
-   ========================================================================== */
-
+/* Cabeçalho AgroMonitor IoT (Figura 1) */
 .agro-header {
   background: linear-gradient(135deg, #1d4d38 0%, #275d45 100%);
   color: #ffffff;
@@ -45,7 +42,7 @@
   font-size: 23px;
 }
 
-.agro-header-titles h1 {
+.agro-header-titles h2 {
   font-size: 1.4rem;
   font-weight: 700;
   color: #ffffff;
@@ -53,7 +50,7 @@
   letter-spacing: -0.01em;
 }
 
-.agro-header-titles p {
+.agro-header-titles .subtitulo {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.82);
   margin: 3px 0 0;
@@ -134,7 +131,6 @@
   border: 1px solid #e5e7eb;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   overflow: hidden;
-  margin-bottom: 28px;
 }
 
 .agro-toolbar {
@@ -215,26 +211,26 @@
   background-color: #193f2d;
 }
 
-/* Tabela do Protótipo */
+/* Tabela de Sensores (Figura 1) */
 .agro-table-responsive {
   width: 100%;
   overflow-x: auto;
 }
 
-.agro-telemetria-table {
+.tabela-sensores {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
   font-size: 0.88rem;
 }
 
-.agro-telemetria-table thead tr {
+.tabela-sensores thead tr {
   background-color: #eff5f1;
   border-top: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.agro-telemetria-table th {
+.tabela-sensores th {
   padding: 13px 20px;
   font-weight: 700;
   font-size: 0.8rem;
@@ -242,14 +238,14 @@
   white-space: nowrap;
 }
 
-.agro-telemetria-table td {
+.tabela-sensores td {
   padding: 15px 20px;
   border-bottom: 1px solid #f1f5f9;
   color: #1e293b;
   vertical-align: middle;
 }
 
-.agro-telemetria-table tbody tr:last-child td {
+.tabela-sensores tbody tr:last-child td {
   border-bottom: none;
 }
 
@@ -299,13 +295,29 @@
   color: #0f172a;
 }
 
-.status-pill {
+/* Distintivos coloridos para os status (Badges) */
+.badge {
   display: inline-block;
   padding: 4px 11px;
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.02em;
+}
+
+.badge-ideal {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge-alerta {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-critico {
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
 .cell-telemetria {
@@ -346,96 +358,7 @@
   background: #fef2f2;
 }
 
-/* ==========================================================================
-   2. ESTILOS DA TABELA DAS ETAPAS 4 E 5 DO DOCUMENTO (.painel-container)
-   ========================================================================== */
-
-.painel-container {
-  background-color: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  padding: 24px 28px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
-}
-
-.painel-container h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1d4d38;
-  margin: 0 0 4px;
-}
-
-.painel-container .subtitulo {
-  font-size: 0.9rem;
-  color: #64748b;
-  margin: 0 0 18px;
-}
-
-.tabela-sensores {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
-  font-size: 0.9rem;
-}
-
-/* Cabeçalho escuro com texto branco (Etapa 5 item c) */
-.tabela-sensores thead tr {
-  background-color: #1d4d38;
-  color: #ffffff;
-}
-
-.tabela-sensores th {
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.84rem;
-}
-
-.tabela-sensores td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e2e8f0;
-  color: #1e293b;
-}
-
-/* Linhas alternadas - zebra (Etapa 5 item c) */
-.tabela-sensores tbody tr:nth-child(even) {
-  background-color: #f8faf9;
-}
-
-.tabela-sensores tbody tr:hover {
-  background-color: #eff5f1;
-}
-
-/* Distintivos coloridos para os status (Badges) */
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.badge-ideal {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.badge-alerta {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-.badge-critico {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-/* ==========================================================================
-   3. MODAL DE CADASTRO E ALTERAÇÃO (FIGURAS 2 E 3)
-   ========================================================================== */
-
+/* Modal de Cadastro e Alteração (Figuras 2 e 3) */
 .agro-modal-overlay {
   position: fixed;
   inset: 0;
