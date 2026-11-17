@@ -5,9 +5,13 @@
 /tmp
 /out-tsc
 /bazel-out
+agro-sensor-web/dist
+agro-sensor-web/tmp
+agro-sensor-web/out-tsc
 
 # Node
 /node_modules
+agro-sensor-web/node_modules
 npm-debug.log
 yarn-error.log
 
@@ -30,6 +34,7 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+agro-sensor-web/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
