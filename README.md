@@ -9,7 +9,6 @@ Aplicação Web Single Page Application (SPA) desenvolvida em **Angular** (arqui
 | Integrante | Matrícula UniRV |
 | --- | --- |
 | Felipe Martins de Almeida | 24107SFT013 |
-| Maria Eduarda Costa Toledo | 24107SFT067 |
 ---
 
 ## 2. Descrição do Projeto
